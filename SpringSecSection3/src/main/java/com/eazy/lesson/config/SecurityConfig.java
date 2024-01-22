@@ -2,15 +2,11 @@ package com.eazy.lesson.config;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-import javax.sql.DataSource;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -18,9 +14,10 @@ public class SecurityConfig {
 
 	@Bean
 	SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+		http.csrf(csrf->csrf.disable());
 		http.authorizeHttpRequests(
 				(requests) -> requests.requestMatchers("/account", "/balance", "/cards", "/loans").authenticated());
-		http.authorizeHttpRequests((requests) -> requests.requestMatchers("/contact", "/notice").permitAll());
+		http.authorizeHttpRequests((requests) -> requests.requestMatchers("/contact", "/notice","/register").permitAll());
 		// http.authorizeHttpRequests(requests->requests.anyRequest().denyAll()); 
 		// http.authorizeHttpRequests(request->request.anyRequest().permitAll());
 		http.formLogin(withDefaults());
